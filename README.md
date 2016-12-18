@@ -1,5 +1,8 @@
 ## Caffeine Concentration Predictor
 
+- `Caffeine Concentration Predictor` <https://asan.shinyapps.io/caff>
+- `Caffeine Concentration Predictor` is open to everyone. We are happy to take your input. Please fork the repo, modify the codes and submit a pull request. <https://github.com/shanmdphd/caff>
+
 ### Reference
 
 This work is solely dependent on the interesting paper published in Eur J Pediatr in 2015. 

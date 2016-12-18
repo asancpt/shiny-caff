@@ -4,86 +4,151 @@ library(dplyr)
 library(markdown)
 library(mgcv)
 library(psych)
-navbarPage(
+
+shinyUI(navbarPage(
     title = "Caffeine Concentration Predictor",
-    ### 1 ###
     tabPanel(
-        title = "PK Parameters",
+        title = "Single",
         sidebarLayout(
             sidebarPanel(
-                
                 sliderInput(
-                    inputId = "BWT",  
+                    inputId = "concBWT",  
                     label = "Body Weight (kg)", 
                     min = 20, max = 100, value = 50, step = 1, round=0),
-                #helpText('If dosing is unknown or diverse, choose 0 (zero).'),
-                sliderInput('Dose', 'Caffeine Dose (mg)', min=50, max=2000,
+                
+                sliderInput('concDose', 'Caffeine Dose (mg)', min=50, max=2000,
                             value=250, step=50),
                 
                 helpText('Red Bull®, 80 mg / Monster® and Rockstar®, 160 mg / 5 h Energy Extra
                          Strength® 242 mg'),
                 
-                sliderInput('Num', 'Simulations N', min=100, max=2000,
-                            value=100, step=100)
-            ),
+                sliderInput('concNum', 'Simulations N', min=5, max=1000,
+                            value=20, step=5),
+                checkboxInput(inputId = "Log", label = "Log scale")
+                ),
             
             mainPanel(
-                tableOutput("contents")
+                tags$h3("Concentration-time Curves of Caffeine"),
+                plotOutput("concplot"),
+                includeMarkdown("reference.md"),
+                tags$h3("Duration of Toxic Concentration"),
+                tableOutput("overlimit"),
+                #helpText('Duration of Toxic Action'),
+                tags$h3("Descriptive Statistics of PK parameters"),
+                tableOutput("conccontents"),
+                tags$h3("Individual PK parameters"),
+                dataTableOutput("showdata"),
+                checkboxInput(inputId = "showme", label = "Show me all the data entries together."),
+                tableOutput("showdataall")
             )
         )
     ),
+    
     tabPanel(
-      title = "Cmax Plot",
-      sidebarLayout(
-        sidebarPanel(
-          sliderInput('cmaxDose', 'Caffeine Dose (mg)', min=50, max=2000,
-                      value=250, step=50),
-          
-          helpText('Red Bull®, 80 mg / Monster® and Rockstar®, 160 mg / 5 h Energy Extra
-                   Strength® 242 mg'),
-          
-          sliderInput('cmaxNum', 'Simulations N', min=5, max=200,
-                      value=20, step=5)
-        ),
-        
-        mainPanel(
-          plotOutput("plot"),
-          helpText("Below 10 mg/L: generally considered safe (Green horizontal line)"),
-          helpText("Over 40 mg/L: several fatalities (Blue horizontal line)"),
-          helpText("Over 80 mg/L: fatal caffeine poisoning (Red horizontal line)"),
-          helpText("Unit: BWT, kg, Cmax, mg/L, Reference: de Wijkerslooth LR et al.(2008), Seifert et al.(2013), Banerjee et al. (2014), Cannon et al. (2001)")
+        title = "Multiple",
+        sidebarLayout(
+            sidebarPanel(
+                sliderInput(
+                    inputId = "superBWT",  
+                    label = "Body Weight (kg)", 
+                    min = 20, max = 100, value = 50, step = 1, round=0),
+                
+                sliderInput('superDose', 'Caffeine Dose (mg)', min=50, max=2000,
+                            value=250, step=50),
+                
+                helpText('Red Bull®, 80 mg / Monster® and Rockstar®, 160 mg / 5 h Energy Extra
+                         Strength® 242 mg'),
+                
+                sliderInput('superTau', 'Interval (hr)', min=0, max=48,
+                            value=4, step=1),
+                
+                sliderInput('superRepeat', 'Repeat (times)', min=1, max=24,
+                            value=6, step=1),
+                
+                sliderInput('superNum', 'Simulations N', min=5, max=1000,
+                            value=20, step=5),
+                
+                checkboxInput(inputId = "superLog", label = "Log scale")
+            ),
+            
+            mainPanel(
+                tags$h3("Concentration-time Curves of Caffeine"),
+                plotOutput("superplot"),
+                includeMarkdown("reference.md"),
+                tags$h3("Descriptive Statistics of PK parameters"),
+                tableOutput("supercontents")
+                
+            )
         )
-      )
     ),
+    
     tabPanel(
-      title = "AUC Plot",
-      sidebarLayout(
-        sidebarPanel(
-          sliderInput('aucDose', 'Caffeine Dose (mg)', min=50, max=2000,
-                      value=250, step=50),
-          
-          helpText('Red Bull®, 80 mg / Monster® and Rockstar®, 160 mg / 5 h Energy Extra
-                   Strength® 242 mg'),
-          
-          sliderInput('aucNum', 'Simulations N', min=5, max=200,
-                      value=20, step=5)
-          ),
-        
-        mainPanel(
-          plotOutput("aucplot"),
-          helpText("Unit: BWT, kg; AUC, mg/h/L")
-          
+        title = "Cmax",
+        sidebarLayout(
+            sidebarPanel(
+                sliderInput('cmaxDose', 'Caffeine Dose (mg)', min=50, max=2000,
+                            value=250, step=50),
+                
+                helpText('Red Bull®, 80 mg / Monster® and Rockstar®, 160 mg / 5 h Energy Extra
+                         Strength® 242 mg'),
+                
+                sliderInput('cmaxNum', 'Simulations N', min=5, max=200,
+                            value=20, step=5),
+                radioButtons(
+                    inputId = "pformat", label = "Plot Format",
+                    choices = c("Jitter" = "Jitter",
+                                "Point" = "Point",
+                                "Boxplot" = "Boxplot"),
+                    selected = "Jitter")
+                
+                ),
+            
+            mainPanel(
+                tags$h3("Cmax plot"),
+                
+                plotOutput("plot"),
+                includeMarkdown("reference.md")
+            )
         )
-      )
-),
-    ### 5 ###
-    tabPanel(
-      title = "Help", 
-      includeMarkdown("README.md")
     ),
-    ### 6 ###
+
     tabPanel(
-      title = "Contact", 
-      includeMarkdown("CONTACT.md")
+        title = "AUC",
+        sidebarLayout(
+            sidebarPanel(
+                sliderInput('aucDose', 'Caffeine Dose (mg)', min=50, max=2000,
+                            value=250, step=50),
+                
+                helpText('Red Bull®, 80 mg / Monster® and Rockstar®, 160 mg / 5 h Energy Extra
+                         Strength® 242 mg'),
+                
+                sliderInput('aucNum', 'Simulations N', min=5, max=200,
+                            value=20, step=5),
+                radioButtons(
+                    inputId = "paucformat", label = "Plot Format",
+                    choices = c("Jitter" = "Jitter",
+                                "Point" = "Point",
+                                "Boxplot" = "Boxplot"),
+                    selected = "Jitter")
+                ),
+            
+            mainPanel(
+                tags$h3("AUC plot"),
+                plotOutput("aucplot")
+                
+            )
+        )
+    ),
+    
+    tabPanel(
+        title = "Help", 
+        includeMarkdown("README.md")
+    ),
+    
+    tabPanel(
+        title = "Contact", 
+        includeMarkdown("CONTACT.md"),
+        includeMarkdown("app.md")
     )
+)
 )
