@@ -142,12 +142,13 @@ shinyUI(navbarPage(
     
     tabPanel(
         title = "Help", 
-        includeMarkdown("README.md")
+        withMathJax(includeMarkdown("README.md"))
     ),
     
     tabPanel(
         title = "Contact", 
         includeMarkdown("CONTACT.md"),
+        includeHTML("disqus.html"),
         includeMarkdown("app.md")
     )
 )

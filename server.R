@@ -211,35 +211,31 @@ shinyServer(function(input, output, session) {
         ConcUnit[ConcUnit == "Ka"] <- "Ka (1/hr)"
         ConcUnit[ConcUnit == "Ke"] <- "Ke (1/hr)"
         
-#        select(Tmax, Cmax, AUC, Half_life, CL, V, Ka, Ke)
         return(ConcUnit)
     })
     
     output$superplot <- renderPlot({
-        
         Subject <- seq(1, input$superNum, length.out = input$superNum) # 
         Time <- seq(0, 96, length.out = 481) # 
         Grid <- expand.grid(x = Subject, y = Time) %>% select(Subject=x, Time=y)
         
         set.seed(Seed)
+        ## Prep for Superposition
         ggsuper <- Dataset(input$superBWT, input$superDose, input$superNum) %>% select(CL, V, Ka, Ke) %>% 
             mutate(Subject = row_number()) %>% 
             left_join(Grid, by = "Subject") %>% 
-            mutate(Conc = input$superDose / V * Ka / (Ka - Ke) * (exp(-Ke * Time) - exp(-Ka * Time)))
-        
-        
-        # RepeatNum <-  - 1
-        if (input$superRepeat > 1) {
-            ggsuper <- ggsuper %>% group_by(Subject) %>% 
-                mutate(ConcOrig = Conc)
-            for (i in 1:input$superRepeat){
-                Frame <- input$superTau * 5 * i
-                ggsuper <- ggsuper %>% 
-                    mutate(ConcTemp = lag(ConcOrig, n = Frame, default = 0)) %>% 
-                    mutate(Conc = Conc + ConcTemp)
-            }
+            mutate(Conc = input$superDose / V * Ka / (Ka - Ke) * (exp(-Ke * Time) - exp(-Ka * Time))) %>% 
+            group_by(Subject) %>% 
+            mutate(ConcOrig = Conc, 
+                   ConcTemp = 0)
+        ## Superposition
+        for (i in 1:input$superRepeat){
+            Frame <- input$superTau * 5 * i
+            ggsuper <- ggsuper %>% 
+                mutate(Conc = Conc + ConcTemp) %>% 
+                mutate(ConcTemp = lag(ConcOrig, n = Frame, default = 0))
         }
-        
+        ## Plot
         p <- ggplot(ggsuper, aes(x=Time, y=Conc)) + #, group=Subject, colour = Conc)) + #Subject)) +
             xlab("Time (hour)") + ylab("Concentration (mg/L)") +
             scale_x_continuous(breaks = seq(0, 96, 12)) +
@@ -250,7 +246,5 @@ shinyServer(function(input, output, session) {
             geom_hline(yintercept = 40, colour="blue") + 
             geom_hline(yintercept = 10, colour="green")
         if (input$superLog == FALSE) print(p) else print(p + scale_y_log10(limits = c(0.1, max(80, ggsuper$Conc))))
-        
     })
-    
 })
