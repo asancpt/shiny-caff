@@ -57,5 +57,4 @@ $$
 
 ### Caffeine contents
 
-![Caffeine Drinks](http://graphs.net/wp-content/uploads/2013/01/Caffeine-Content-in-Energy-Drinks.jpg)
-
+<div align=center><img src=http://graphs.net/wp-content/uploads/2013/01/Caffeine-Content-in-Energy-Drinks.jpg width = 450 /></div>
