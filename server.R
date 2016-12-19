@@ -177,7 +177,7 @@ shinyServer(function(input, output, session) {
             geom_hline(yintercept = 80, colour="red") + 
             geom_hline(yintercept = 40, colour="blue") + 
             geom_hline(yintercept = 10, colour="green")
-        if (input$Log == FALSE) print(p) else print(p + scale_y_log10(limits = c(0.1, max(80, ggConc$Conc))))
+        if (input$Log == FALSE) print(p) else print(p + scale_y_log10())#limits = c(0.1, max(80, ggConc$Conc))))
     })
     
     output$conccontents <- renderTable({
@@ -245,6 +245,6 @@ shinyServer(function(input, output, session) {
             geom_hline(yintercept = 80, colour="red") + 
             geom_hline(yintercept = 40, colour="blue") + 
             geom_hline(yintercept = 10, colour="green")
-        if (input$superLog == FALSE) print(p) else print(p + scale_y_log10(limits = c(0.1, max(80, ggsuper$Conc))))
+        if (input$superLog == FALSE) print(p) else print(p + scale_y_log10())#limits = c(0.1, max(80, ggsuper$Conc))))
     })
 })
