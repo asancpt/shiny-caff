@@ -22,7 +22,7 @@ shinyUI(navbarPage(
                 helpText('Red Bull®, 80 mg / Monster® and Rockstar®, 160 mg / 5 h Energy Extra
                          Strength® 242 mg'),
                 
-                sliderInput('concNum', 'Simulations N', min=5, max=1000,
+                sliderInput('concNum', 'Simulations N', min=5, max=2000,
                             value=20, step=5),
                 checkboxInput(inputId = "Log", label = "Log scale")
                 ),
@@ -65,7 +65,7 @@ shinyUI(navbarPage(
                 sliderInput('superRepeat', 'Repeat (times)', min=1, max=24,
                             value=6, step=1),
                 
-                sliderInput('superNum', 'Simulations N', min=5, max=1000,
+                sliderInput('superNum', 'Simulations N', min=5, max=2000,
                             value=20, step=5),
                 
                 checkboxInput(inputId = "superLog", label = "Log scale")
@@ -92,14 +92,15 @@ shinyUI(navbarPage(
                 helpText('Red Bull®, 80 mg / Monster® and Rockstar®, 160 mg / 5 h Energy Extra
                          Strength® 242 mg'),
                 
-                sliderInput('cmaxNum', 'Simulations N', min=5, max=200,
+                sliderInput('cmaxNum', 'Simulations N', min=5, max=2000,
                             value=20, step=5),
                 radioButtons(
                     inputId = "pformat", label = "Plot Format",
-                    choices = c("Jitter" = "Jitter",
+                    choices = c("Sina" = "Sina", 
+                                "Jitter" = "Jitter",
                                 "Point" = "Point",
                                 "Boxplot" = "Boxplot"),
-                    selected = "Jitter")
+                    selected = "Sina")
                 
                 ),
             
@@ -122,14 +123,15 @@ shinyUI(navbarPage(
                 helpText('Red Bull®, 80 mg / Monster® and Rockstar®, 160 mg / 5 h Energy Extra
                          Strength® 242 mg'),
                 
-                sliderInput('aucNum', 'Simulations N', min=5, max=200,
+                sliderInput('aucNum', 'Simulations N', min=5, max=2000,
                             value=20, step=5),
                 radioButtons(
                     inputId = "paucformat", label = "Plot Format",
-                    choices = c("Jitter" = "Jitter",
+                    choices = c("Sina" = "Sina",
+                                "Jitter" = "Jitter",
                                 "Point" = "Point",
                                 "Boxplot" = "Boxplot"),
-                    selected = "Jitter")
+                    selected = "Sina")
                 ),
             
             mainPanel(
