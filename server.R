@@ -203,7 +203,7 @@ shinyServer(function(input, output, session) {
         ConcUnit <- Simul(DatasetMulti(input$superBWT, input$superDose, input$superNum, input$superTau))
         ConcUnit[ConcUnit == "Tmax"] <- "Tmax (hr)"
         ConcUnit[ConcUnit == "Cmax"] <- "Cmax (mg/L)"
-        ConcUnit[ConcUnit == "Cssav"] <- "Css,av (mg/L)"
+        ConcUnit[ConcUnit == "Cssav"] <- "Cav,ss (mg/L)"
         ConcUnit[ConcUnit == "AUC"] <- "AUC (mg*hr/L)"
         ConcUnit[ConcUnit == "Half_life"] <- "Half_life (hr)"
         ConcUnit[ConcUnit == "CL"] <- "CL (L/hr)"

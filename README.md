@@ -8,6 +8,7 @@
 This work is solely dependent on the interesting paper published in Eur J Pediatr in 2015. 
 
 - "Prediction of plasma caffeine concentrations in young adolescents following ingestion of caffeinated energy drinks: a Monte Carlo simulation." Eur J Pediatr. 2015 Dec;174(12):1671-8. doi: 10.1007/s00431-015-2581-x <https://www.ncbi.nlm.nih.gov/pubmed/26113286>
+- "Clinical pharmacokinetics and pharmacodynamics: concepts and applications, 4th edition" Lippincott Williams & Wilkins. 2011. ISBN 978-0-7817-5009-7
 
 The pharmacokinetic parameters from the paper were derived and used in the app as follows:
 
@@ -32,18 +33,21 @@ $$
 \end{bmatrix}
 \bigg) \newline
 \newline
-CL\ (mg/L) & = 0.09792 \cdot Body Weight \cdot e^{\eta1} \newline
-V\ (L) & = 0.7219 \cdot Body Weight \cdot e^{\eta2} \newline
-Ka\ (1/hr) & = 4.268 \cdot e^{\eta3} \newline
+CL\ (mg/L) & = 0.09792 \cdot W \cdot e^{\eta1} \newline
+V\ (L) & = 0.7219 \cdot W \cdot e^{\eta2} \newline
+k_a\ (1/hr) & = 4.268 \cdot e^{\eta3} \newline
 \newline
-Ke\ (1/hr) & = \frac{CL}{V} \newline
-t_{1/2}\ (hr) & = \frac{0.693}{K_e} \newline
-T_{max}\ (hr) & = \frac{ln(K_a) - ln(K_e)}{K_a - K_e} \newline
-C_{max}\ (mg/L) & = \frac{Dose}{V} \cdot \frac{K_a}{K_a - K_e} \cdot (e^{-K_e \cdot  T_{max}} - e^{-K_a \cdot T_{max}}) \newline
-AUC\ (mg \cdot hr / L)  & = \frac{Dose}{CL} 
+k\ (1/hr) & = \frac{CL}{V} \newline
+t_{1/2}\ (hr) & = \frac{0.693}{k} \newline
+t_{max}\ (hr) & = \frac{ln(k_a) - ln(k)}{k_a - k} \newline
+C_{max}\ (mg/L) & = \frac{Dose}{V} \cdot \frac{k_a}{k_a - k} \cdot (e^{-k \cdot  t_{max}} - e^{-k_a \cdot t_{max}}) \newline
+AUC\ (mg \cdot hr / L)  & = \frac{Dose}{CL} \newline
+\newline
+C_{av,ss} & = \frac{Dose}{CL \cdot \tau} \newline 
+AI & = \frac{1}{1-e^{-k_e \cdot \tau}} \newline
 \end{split}
 $$
-
+(Abbreviation: $AI$, accumulation index; $AUC$, area under the plasma drug concentration-time curve; $CL$, total clearance of drug from plasma; $C_{av,ss}$, average drug concentration in plasma during a dosing interval at steady state on administering a fixed dose at equal dosing intervals; $C_{max}$, highest drug concentration observed in plasma; $MVN$, multivariate normal distribution; $V$, Volume of distribution (apparent) based on drug concentration in plasma; $W$, body weight; $\eta$, interindividual random variability parameter; $k$, elimination rate constant;  $k_a$, absorption rate constant; $\tau$, dosing interval; $t_{1/2}$, elimination half-life)
 
 ### R Packages
 - H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2009.
