@@ -110,7 +110,7 @@ shinyServer(function(input, output, session) {
         geom_hline(yintercept = 10, colour="green") +
         scale_colour_gradient(low="navy", high="red", space="Lab")
       
-      if (input$pformat == "Sina") print(p + geom_sina(binwidth = 3))
+      if (input$pformat == "Sina") print(p + geom_sina(binwidth = 3, size = 1))
       if (input$pformat == "Jitter") print(p + geom_jitter(position = position_jitter(width = .1)))
       if (input$pformat == "Point") print(p + geom_point())
       if (input$pformat == "Boxplot") print(p + geom_boxplot())
