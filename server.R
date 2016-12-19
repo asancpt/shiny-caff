@@ -108,7 +108,7 @@ shinyServer(function(input, output, session) {
         geom_hline(yintercept = 80, colour="red") + 
         geom_hline(yintercept = 40, colour="blue") + 
         geom_hline(yintercept = 10, colour="green") +
-        scale_colour_gradient(low="navy", high="red", space="Lab")
+        scale_colour_gradient(low="navy", high="red", space="Lab") + theme_linedraw()
       
       if (input$pformat == "Sina") print(p + geom_sina(binwidth = 3, size = 1))
       if (input$pformat == "Jitter") print(p + geom_jitter(position = position_jitter(width = .1)))
@@ -131,7 +131,7 @@ shinyServer(function(input, output, session) {
         )
       }
       p <- ggplot(ggDset, aes(x=factor(BWT), y=AUC, colour=AUC)) +
-          xlab("Body Weight (kg)") + ylab("AUC (mg*hr/L)")
+          xlab("Body Weight (kg)") + ylab("AUC (mg*hr/L)") + theme_linedraw()
       
       if (input$paucformat == "Sina") print(p + geom_sina(binwidth = 4))
       if (input$paucformat == "Jitter") print(p + geom_jitter(position = position_jitter(width = .1)))
@@ -175,12 +175,13 @@ shinyServer(function(input, output, session) {
         p <- ggplot(ggConc, aes(x=Time, y=Conc)) + 
             xlab("Time (hour)") + ylab("Concentration (mg/L)") +
             scale_x_continuous(breaks = seq(from = 0, to = 24, by = 4)) +
-            scale_colour_gradient(low="navy", high="red", space="Lab") +
+            #scale_color_gradient2() +
+            #scale_colour_gradient(low="navy", high="red", space="Lab") +
             geom_line(aes(group = Subject, colour = Conc)) + 
             stat_summary(fun.y = "mean", colour = "#F0E442", size = 1, geom = "line") +
             geom_hline(yintercept = 80, colour="red") + 
             geom_hline(yintercept = 40, colour="blue") + 
-            geom_hline(yintercept = 10, colour="green")
+            geom_hline(yintercept = 10, colour="green") + theme_linedraw()
         if (input$Log == FALSE) print(p) else print(p + scale_y_log10())#limits = c(0.1, max(80, ggConc$Conc))))
     })
     
@@ -243,12 +244,12 @@ shinyServer(function(input, output, session) {
         p <- ggplot(ggsuper, aes(x=Time, y=Conc)) + #, group=Subject, colour = Conc)) + #Subject)) +
             xlab("Time (hour)") + ylab("Concentration (mg/L)") +
             scale_x_continuous(breaks = seq(0, 96, 12)) +
-            scale_colour_gradient(low="navy", high="red", space="Lab") +
+            #scale_colour_gradient(low="navy", high="red", space="Lab") +
             geom_line(aes(group = Subject, colour = Conc)) + 
             stat_summary(fun.y = "mean", colour = "#F0E442", size = 1, geom = "line") +
             geom_hline(yintercept = 80, colour="red") + 
             geom_hline(yintercept = 40, colour="blue") + 
-            geom_hline(yintercept = 10, colour="green")
+            geom_hline(yintercept = 10, colour="green") + theme_linedraw()
         if (input$superLog == FALSE) print(p) else print(p + scale_y_log10())#limits = c(0.1, max(80, ggsuper$Conc))))
     })
 })
